@@ -6,10 +6,6 @@ app.get('/index', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );
 })
  
- app.get('/list', function (req, res) {
-   res.sendFile( __dirname + "/" + "list.html" );
-})
-
 var server = app.listen(8081, () => {
   var host = server.address().address
   var port = server.address().port
