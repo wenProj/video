@@ -7,7 +7,7 @@ const run = async ()=> {
   let arr = ['192.168.1.132','120.79.58.203','116.226.24.173','119.23.213.204','54.254.147.226','120.77.176.146','211.103.147.6','120.77.157.237','116.226.24.183'];
   for(let i in arr){
     // console.log(arr[i]);
-    await new Promise((resolve)=> {
+    await new Promise((carryon)=> {
       //同步处理
       let url = 'http://www.ip138.com/ips1388.asp?ip='+arr[i]+'&action=2';
       //请求头
@@ -45,7 +45,7 @@ const run = async ()=> {
         console.log(detail);
 
         //执行下一个
-        resolve();
+        carryon();
       });
       
       // setTimeout(()=>{resolve();},3000);//3秒
