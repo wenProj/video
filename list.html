@@ -7,13 +7,31 @@
 	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
 	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<!-- 同意a标签去掉样式 -->
 	<style type="text/css">
+		/* 统一a标签去掉样式 */
 		a,a:link,a:visited,a:hover,a:active{
 			color:#333;
 			text-decoration:none;
 		}
+		/* 去掉表格横线 */
+		.table>tbody>tr>td{
+			border:0px;
+		}
 	</style>
+	<!-- 箭头的上下变动 -->
+	<script type="text/javascript">
+		$(function () {
+			$('.upDownArrow').on('click', function () {
+				if($(this).attr('aria-expanded') == 'false' || $(this).attr('aria-expanded') == undefined){
+					//折叠的情况-点击箭头变为上
+					$(this).children("h4").children("i").attr("class", "glyphicon glyphicon-menu-up");
+				}else{
+					//展开的情况-点击箭头变为下
+					$(this).children("h4").children("i").attr("class", "glyphicon glyphicon-menu-down");
+				}
+			});
+		});
+	</script> 
 </head>
 <body>
 	<div class="list-group">
@@ -23,177 +41,206 @@
 			</h4>
 		</a>
 		<div id="collapseThree" class="panel-collapse collapse in"> <!-- in 控制都打开-->
-			<a href="#collapseFive" class="list-group-item" data-toggle="collapse" data-parent="#accordion">
+			<a href="#collapseFive" class="upDownArrow list-group-item" data-toggle="collapse" data-parent="#accordion">
 					<h4 class="list-group-item-heading">
 						权力游戏/冰与火之歌&thinsp;&thinsp;<i class="glyphicon glyphicon-menu-down"></i>
 					</h4>
 			</a>
-			<div id="collapseFive" class="panel-collapse collapse"> <!-- in 控制都打开-->
-				<a href="#collapseSix" class="list-group-item" data-toggle="collapse" data-parent="#accordion">
+			<div id="collapseFive" class="panel-collapse collapse">
+				<a href="#collapseSix" class="upDownArrow list-group-item" data-toggle="collapse" data-parent="#accordion">
 					<h4 class="list-group-item-heading">
 						&emsp;&emsp;第一季&thinsp;&thinsp;<i class="glyphicon glyphicon-menu-down"></i>
 					</h4>
 				</a>
-				<div id="collapseSix" class="panel-collapse collapse"> <!-- in 控制都打开-->
+				<div id="collapseSix" class="panel-collapse collapse">
 					<div href="#" class="list-group-item">
-						<h4 class="list-group-item-heading">
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第一集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第二集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第三集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第四集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第五集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第六集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第七集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第八集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第九集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第十集</a>
+						<h4 class="list-group-item-heading" style="margin-left: 28px">
+							<table class="table" style="margin-bottom: 0px;"><!-- 居中 -->
+							   <tbody>
+								  <tr>
+									 <td><a href="./index.html?name=qfl.mp4">第一集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第二集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第三集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第四集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第五集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第六集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第七集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第八集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第九集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第十集</a></td>
+								  </tr>
+							   </tbody>
+							</table>
 						</h4>
 					</div>
 				</div>
 
-				<a href="#collapseSeven" class="list-group-item" data-toggle="collapse" data-parent="#accordion">
+				<a href="#collapseSeven" class="upDownArrow list-group-item" data-toggle="collapse" data-parent="#accordion">
 					<h4 class="list-group-item-heading">
 						&emsp;&emsp;第二季&thinsp;&thinsp;<i class="glyphicon glyphicon-menu-down"></i>
 					</h4>
 				</a>
 				<div id="collapseSeven" class="panel-collapse collapse">
 					<div href="#" class="list-group-item">
-						<h4 class="list-group-item-heading">
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第一集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第二集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第三集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第四集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第五集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第六集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第七集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第八集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第九集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第十集</a>
-						</h4>
+						<h4 class="list-group-item-heading" style="margin-left: 28px">
+								<table class="table" style="margin-bottom: 0px;"><!-- 居中 -->
+									<tbody>
+										<tr>
+											<td><a href="./index.html?name=qfl.mp4">第一集</a></td>
+											<td><a href="./index.html?name=qfl.mp4">第二集</a></td>
+											<td><a href="./index.html?name=qfl.mp4">第三集</a></td>
+											<td><a href="./index.html?name=qfl.mp4">第四集</a></td>
+											<td><a href="./index.html?name=qfl.mp4">第五集</a></td>
+											<td><a href="./index.html?name=qfl.mp4">第六集</a></td>
+											<td><a href="./index.html?name=qfl.mp4">第七集</a></td>
+											<td><a href="./index.html?name=qfl.mp4">第八集</a></td>
+											<td><a href="./index.html?name=qfl.mp4">第九集</a></td>
+											<td><a href="./index.html?name=qfl.mp4">第十集</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</h4>
 					</div>
 				</div>
 
-				<a href="#collapseEight" class="list-group-item" data-toggle="collapse" data-parent="#accordion">
+				<a href="#collapseEight" class="upDownArrow list-group-item" data-toggle="collapse" data-parent="#accordion">
 					<h4 class="list-group-item-heading">
 						&emsp;&emsp;第三季&thinsp;&thinsp;<i class="glyphicon glyphicon-menu-down"></i>
 					</h4>
 				</a>
 				<div id="collapseEight" class="panel-collapse collapse">
 					<div href="#" class="list-group-item">
-						<h4 class="list-group-item-heading">
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第一集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第二集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第三集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第四集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第五集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第六集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第七集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第八集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第九集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第十集</a>
+						<h4 class="list-group-item-heading" style="margin-left: 28px">
+							<table class="table" style="margin-bottom: 0px;"><!-- 居中 -->
+							   <tbody>
+								  <tr>
+									 <td><a href="./index.html?name=qfl.mp4">第一集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第二集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第三集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第四集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第五集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第六集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第七集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第八集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第九集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第十集</a></td>
+								  </tr>
+							   </tbody>
+							</table>
 						</h4>
 					</div>
 				</div>
 
-				<a href="#collapseNine" class="list-group-item" data-toggle="collapse" data-parent="#accordion">
+				<a href="#collapseNine" class="upDownArrow list-group-item" data-toggle="collapse" data-parent="#accordion">
 					<h4 class="list-group-item-heading">
 						&emsp;&emsp;第四季&thinsp;&thinsp;<i class="glyphicon glyphicon-menu-down"></i>
 					</h4>
 				</a>
 				<div id="collapseNine" class="panel-collapse collapse">
 					<div href="#" class="list-group-item">
-						<h4 class="list-group-item-heading">
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第一集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第二集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第三集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第四集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第五集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第六集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第七集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第八集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第九集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第十集</a>
+						<h4 class="list-group-item-heading" style="margin-left: 28px">
+							<table class="table" style="margin-bottom: 0px;"><!-- 居中 -->
+							   <tbody>
+								  <tr>
+									 <td><a href="./index.html?name=qfl.mp4">第一集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第二集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第三集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第四集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第五集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第六集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第七集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第八集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第九集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第十集</a></td>
+								  </tr>
+							   </tbody>
+							</table>
 						</h4>
 					</div>
 				</div>
 
-				<a href="#collapseTen" class="list-group-item" data-toggle="collapse" data-parent="#accordion">
+				<a href="#collapseTen" class="upDownArrow list-group-item" data-toggle="collapse" data-parent="#accordion">
 					<h4 class="list-group-item-heading">
 						&emsp;&emsp;第五季&thinsp;&thinsp;<i class="glyphicon glyphicon-menu-down"></i>
 					</h4>
 				</a>
 				<div id="collapseTen" class="panel-collapse collapse">
 					<div href="#" class="list-group-item">
-						<h4 class="list-group-item-heading">
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第一集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第二集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第三集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第四集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第五集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第六集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第七集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第八集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第九集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第十集</a>
+						<h4 class="list-group-item-heading" style="margin-left: 28px">
+							<table class="table" style="margin-bottom: 0px;"><!-- 居中 -->
+							   <tbody>
+								  <tr>
+									 <td><a href="./index.html?name=qfl.mp4">第一集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第二集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第三集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第四集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第五集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第六集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第七集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第八集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第九集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第十集</a></td>
+								  </tr>
+							   </tbody>
+							</table>
 						</h4>
 					</div>
 				</div>
 				
-				<a href="#collapseEleven" class="list-group-item" data-toggle="collapse" data-parent="#accordion">
+				<a href="#collapseEleven" class="upDownArrow list-group-item" data-toggle="collapse" data-parent="#accordion">
 					<h4 class="list-group-item-heading">
 						&emsp;&emsp;第六季&thinsp;&thinsp;<i class="glyphicon glyphicon-menu-down"></i>
 					</h4>
 				</a>
 				<div id="collapseEleven" class="panel-collapse collapse">
 					<div href="#" class="list-group-item">
-						<h4 class="list-group-item-heading">
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第一集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第二集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第三集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第四集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第五集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第六集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第七集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第八集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第九集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第十集</a>
+						<h4 class="list-group-item-heading" style="margin-left: 28px">
+							<table class="table" style="margin-bottom: 0px;"><!-- 居中 -->
+							   <tbody>
+								  <tr>
+									 <td><a href="./index.html?name=qfl.mp4">第一集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第二集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第三集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第四集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第五集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第六集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第七集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第八集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第九集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第十集</a></td>
+								  </tr>
+							   </tbody>
+							</table>
 						</h4>
 					</div>
 				</div>
 
-				<a href="#collapseTwelve" class="list-group-item" data-toggle="collapse" data-parent="#accordion">
+				<a href="#collapseTwelve" class="upDownArrow list-group-item" data-toggle="collapse" data-parent="#accordion">
 					<h4 class="list-group-item-heading">
 						&emsp;&emsp;第七季&thinsp;&thinsp;<i class="glyphicon glyphicon-menu-down"></i>
 					</h4>
 				</a>
 				<div id="collapseTwelve" class="panel-collapse collapse">
 					<div href="#" class="list-group-item">
-						<h4 class="list-group-item-heading">
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第一集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第二集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第三集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第四集</a>
-							<br/><br/>
-							&emsp;&emsp;&emsp;&emsp;<a href="./index.html?name=qfl.mp4">第五集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第六集</a>
-							&ensp;<a href="./index.html?name=qfl.mp4">第七集</a>
+						<h4 class="list-group-item-heading" style="margin-left: 28px">
+							<table class="table" style="margin-bottom: 0px;"><!-- 居中 -->
+							   <tbody>
+								  <tr>
+									 <td><a href="./index.html?name=qfl.mp4">第一集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第二集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第三集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第四集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第五集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第六集</a></td>
+									 <td><a href="./index.html?name=qfl.mp4">第七集</a></td>
+								  </tr>
+							   </tbody>
+							</table>
 						</h4>
 					</div>
 				</div>
 
-				<a href="#collapseThirteen" class="list-group-item" data-toggle="collapse" data-parent="#accordion">
+				<a href="#collapseThirteen" class="upDownArrow list-group-item" data-toggle="collapse" data-parent="#accordion">
 					<h4 class="list-group-item-heading">
 						&emsp;&emsp;第八季&thinsp;&thinsp;<i class="glyphicon glyphicon-menu-down"></i>
 					</h4>
@@ -201,7 +248,7 @@
 				<div id="collapseThirteen" class="panel-collapse collapse">
 					<div href="#" class="list-group-item">
 						<h4 class="list-group-item-heading">
-							&emsp;&emsp;&emsp;&emsp;<a href="#">待更新</a>
+							&emsp;&emsp;<a href="#">待更新</a>
 						</h4>
 					</div>
 				</div>
@@ -385,17 +432,23 @@
 					美国往事
 				</h4>
 			</a>
-			<a href="#collapseFour" class="list-group-item" data-toggle="collapse" data-parent="#accordion">
+			<a href="#collapseFour" class="upDownArrow list-group-item" data-toggle="collapse" data-parent="#accordion">
 				<h4 class="list-group-item-heading">
 					教父系列&thinsp;&thinsp;<i class="glyphicon glyphicon-menu-down"></i>
 				</h4>
 			</a>
 			<div id="collapseFour" class="panel-collapse collapse"> <!-- in 控制都打开-->
 				<div href="./index.html?name=qfl.mp4" class="list-group-item">
-					<h4 class="list-group-item-heading">
-						&emsp;&emsp;<a href="./index.html?name=qfl.mp4">教父1</a>
-						&ensp;<a href="./index.html?name=qfl.mp4">教父2</a>
-						&ensp;<a href="./index.html?name=qfl.mp4">教父3</a>
+					<h4 class="list-group-item-heading" style="margin-left: 28px">
+						<table class="table" style="margin-bottom: 0px;"><!-- 居中 -->
+							<tbody>
+								<tr>
+									<td><a href="./index.html?name=qfl.mp4">教父1</a></td>
+									<td><a href="./index.html?name=qfl.mp4">教父2</a></td>
+									<td><a href="./index.html?name=qfl.mp4">教父3</a></td>
+								</tr>
+							</tbody>
+						</table>
 					</h4>
 				</div>
 			</div>
@@ -424,7 +477,7 @@
 					一级恐惧
 				</h4>
 			</a>
-			<a href="./index.html?name=qfl.mp4" class="list-group-item">
+			<a href="./index.html?name=ber.mp4" class="list-group-item">
 				<h4 class="list-group-item-heading">
 					八恶人 *
 				</h4>
@@ -434,22 +487,22 @@
 					被解救的姜戈 +
 				</h4>
 			</a>
-			<a href="./index.html?name=qfl.mp4" class="list-group-item">
+			<a href="./index.html?name=bjjlb.mp4" class="list-group-item">
 				<h4 class="list-group-item-heading">
 					搏击俱乐部 *
 				</h4>
 			</a>
-			<a href="./index.html?name=qfl.mp4" class="list-group-item">
+			<a href="./index.html?name=dmkj.mp4" class="list-group-item">
 				<h4 class="list-group-item-heading">
 					盗梦空间 *
 				</h4>
 			</a>
-			<a href="./index.html?name=qfl.mp4" class="list-group-item">
+			<a href="./index.html?name=hkdg.mp4" class="list-group-item">
 				<h4 class="list-group-item-heading">
-					骇客帝国1 *
+					黑客帝国1 *
 				</h4>
 			</a>
-			<a href="./index.html?name=qfl.mp4" class="list-group-item">
+			<a href="./index.html?name=kn.mp4" class="list-group-item">
 				<h4 class="list-group-item-heading">
 					狂怒 *
 				</h4>

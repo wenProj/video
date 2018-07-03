@@ -10,7 +10,7 @@ var url = require('url');
 // 建立 express 实例
 var app = express();
  
-var Url = 'http://tiyu.baidu.com/match/%E4%B8%96%E7%95%8C%E6%9D%AF/from/baidu_aladdin';
+var Url = 'http://2018.qq.com/';
  
 superagent.get(Url).end(function (err, response) {
     if (err) {
