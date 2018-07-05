@@ -8,6 +8,7 @@ app.get('/index', function (req, res) {
 
 //显示2018世界杯数据
 app.get('/2018wc', function (req, res) {
+  
   res.sendFile( __dirname + "/" + "worldCup.html" );
 })
  
