@@ -126,67 +126,90 @@ const run = async()=> {
           console.log(`ip数组长度:${arr.length}`);
           for(let i in arr){
             console.log(`ip:${arr[i]}`);
-            await new Promise((carryon2)=> {
+            await new Promise(async (carryon2)=> {
+
+              let url = "http://ip.taobao.com/service/getIpInfo2.php";
+              const ret = await postPromise({url:url,form:{ip:arr[i]}});
+            
+              let area_country = "";
+              let area_province = "";
+              let area_city = "";
+              //解析响应json
+              if(ret != undefined && ret.body != undefined && ret.body != ""){
+                let body = JSON.parse(ret.body)
+                if(body.code == '0'){
+                  let data = body.data;
+                  //省/市/区
+                  if(data.country != ""){
+                    area_country = data.country;
+                  }else{
+                    area_country = data.area;
+                  }
+                  area_province = data.region;
+                  area_city = data.city;
+                }
+              }
+              let area = area_country+area_province+area_city;
 
               //调用百度集成的ip查询  ip138
-              let url = 'http://www.ip138.com/ips1388.asp?ip='+arr[i]+'&action=2';//备用  http://www.882667.com/ip_114.252.242.46.html
-              //请求头
-              let headers = {
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36'
-              }
-              let options = {
-                url: url,
-                encoding: null,
-                headers: headers
-              }
+              // let url = 'http://www.ip138.com/ips1388.asp?ip='+arr[i]+'&action=2';//备用  http://www.882667.com/ip_114.252.242.46.html
+              // //请求头
+              // let headers = {
+              //   'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36'
+              // }
+              // let options = {
+              //   url: url,
+              //   encoding: null,
+              //   headers: headers
+              // }
 
-              //发送请求
-              request(options, async (err, res, body)=> {
-                //解决乱码
-                let html = iconv.decode(body, 'gb2312');
+              // //发送请求
+              // request(options, async (err, res, body)=> {
+              //   //解决乱码
+              //   let html = iconv.decode(body, 'gb2312');
 
-                //分析网页数据
-                let $ = cheerio.load(html);
-                let lis = $("ul.ul1 li");
+              //   //分析网页数据
+              //   let $ = cheerio.load(html);
+              //   let lis = $("ul.ul1 li");
 
-                //入库信息-地区
-                let temp = lis.first().text();
-                let area = temp.split(" ")[0].replace("本站数据：","");
+              //   //入库信息-地区
+              //   let temp = lis.first().text();
+              //   let area = temp.split(" ")[0].replace("本站数据：","");
 
-                //拆分 省/自治区/直辖市 ---- 市/区
-                // console.log(`原始未拆分:${area}`);
-                let sheng = area.indexOf("省");
-                let qu = area.indexOf("自治区");
-                let shi = area.indexOf("市");
+              //   //拆分 省/自治区/直辖市 ---- 市/区
+              //   // console.log(`原始未拆分:${area}`);
+              //   let sheng = area.indexOf("省");
+              //   let qu = area.indexOf("自治区");
+              //   let shi = area.indexOf("市");
 
-                let area_province = "";
-                let area_city = "";
-                if(sheng != -1){
-                  area_province = area.substring(0,sheng+1);
-                  area_city = area.substring(sheng+1);
+              //   let area_province = "";
+              //   let area_city = "";
+              //   if(sheng != -1){
+              //     area_province = area.substring(0,sheng+1);
+              //     area_city = area.substring(sheng+1);
 
-                }else if(qu != -1){
-                  area_province = area.substring(0,qu+3);
-                  area_city = area.substring(qu+3);
+              //   }else if(qu != -1){
+              //     area_province = area.substring(0,qu+3);
+              //     area_city = area.substring(qu+3);
 
-                }else if(shi != -1){
-                  area_province = area.substring(0,shi+1);
-                  area_city = area.substring(shi+1);
+              //   }else if(shi != -1){
+              //     area_province = area.substring(0,shi+1);
+              //     area_city = area.substring(shi+1);
 
-                }else{
-                  area_province = area;
-                  area_city = area;
-                }
+              //   }else{
+              //     area_province = area;
+              //     area_city = area;
+              //   }
 
-                //遍历详细信息
-                let detail = "";
-                lis.each( (i)=> {
-                  detail += lis.eq(i).text() + "-------";
-                });
+              //   //遍历详细信息
+              //   let detail = "";
+              //   lis.each( (i)=> {
+              //     detail += lis.eq(i).text() + "-------";
+              //   });
                 // console.log(`详细信息:${detail}`);
 
                 //记录到数据库
-                connection.query(`SELECT id,area_origin,area_province,area_city,access_count,update_time,log_date FROM area_ip WHERE area_origin='${area}'`, (error, results, fields)=> {
+                connection.query(`SELECT id,area_country,area_province,area_city,access_count,update_time,log_date FROM area_ip WHERE area_origin='${area}'`, (error, results, fields)=> {
                   if (error) {
                     console.log(`数据库查询出错:${error}`);
                     // throw error;
@@ -200,7 +223,7 @@ const run = async()=> {
                         console.log(`数据库修改出错:${error}`);
                         // throw error;
                       }
-                      console.log(`修改,访问量累加---area_origin:${area}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`)
+                      console.log(`修改,访问量累加---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`)
                       if(result != undefined && result.affectedRows == 1){//修改数据成功
                         //循环下一个ip
                         carryon2();
@@ -208,15 +231,15 @@ const run = async()=> {
                     });
                   }else if(results.length == 0){
                     //新增记录access_count=1
-                    var  addSql = 'INSERT INTO area_ip(area_origin,area_province,area_city,access_count,last_access_ip,update_time,log_date) VALUES(?,?,?,?,?,?,?)'; //id自增
-                    var  addSqlParams = [area,area_province,area_city,1,arr[i],new Date(),logdate]; //可接受传递参数++++++++++++++++日志后缀日期
+                    var  addSql = 'INSERT INTO area_ip(area_origin,area_country,area_province,area_city,access_count,last_access_ip,update_time,log_date) VALUES(?,?,?,?,?,?,?,?)'; //id自增
+                    var  addSqlParams = [area,area_country,area_province,area_city,1,arr[i],new Date(),logdate]; //可接受传递参数++++++++++++++++日志后缀日期
 
                     connection.query(addSql,addSqlParams,function (error, result) {
                       if(error){
                         console.log(`数据库新增出错:${error}`);
                         // throw error;
                       }
-                      console.log(`新增,该地区记录---area_origin:${area}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`)
+                      console.log(`新增,该地区记录---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`)
                       if(result != undefined && result.affectedRows == 1){//插入数据成功
                         //循环下一个ip
                         carryon2();
@@ -228,7 +251,7 @@ const run = async()=> {
                 // console.log('----------------------跑完一条--------------------------');
                 // setTimeout(()=>{carryon2()},3000);//3秒
               });
-            })
+            // })
           }
         }
         carryon4();
@@ -238,3 +261,35 @@ const run = async()=> {
 }
 
 run();
+
+const api_taobao = async (ip)=> {
+  let url = "http://ip.taobao.com/service/getIpInfo2.php";
+  const ret = await postPromise({url:url,form:{ip:ip}});
+
+  let param = {
+    "area_country":"",
+    "let area_province":"",
+    "area_city":"",
+  };
+  //解析响应json
+  if(ret != undefined && ret.body != undefined && ret.body != ""){
+    let body = JSON.parse(ret.body)
+    if(body.code == '0'){
+      let data = body.data;
+      //省/市/区
+      if(data.country != ""){
+        param.area_country = data.country;
+      }else{
+        param.area_country = data.area;
+      }
+      param.area_province = data.region;
+      param.area_city = data.city;
+    }
+  }
+  return param;
+}
+// let param = api_taobao('110.54.145.218');
+
+// console.log(param.area_country);
+// console.log(param.area_province);
+// console.log(param.area_city);
