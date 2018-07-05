@@ -149,64 +149,8 @@ const run = async()=> {
                   area_city = data.city;
                 }
               }
+              //地区未拆分，用于area_origin和查询条件
               let area = area_country+area_province+area_city;
-
-              //调用百度集成的ip查询  ip138
-              // let url = 'http://www.ip138.com/ips1388.asp?ip='+arr[i]+'&action=2';//备用  http://www.882667.com/ip_114.252.242.46.html
-              // //请求头
-              // let headers = {
-              //   'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36'
-              // }
-              // let options = {
-              //   url: url,
-              //   encoding: null,
-              //   headers: headers
-              // }
-
-              // //发送请求
-              // request(options, async (err, res, body)=> {
-              //   //解决乱码
-              //   let html = iconv.decode(body, 'gb2312');
-
-              //   //分析网页数据
-              //   let $ = cheerio.load(html);
-              //   let lis = $("ul.ul1 li");
-
-              //   //入库信息-地区
-              //   let temp = lis.first().text();
-              //   let area = temp.split(" ")[0].replace("本站数据：","");
-
-              //   //拆分 省/自治区/直辖市 ---- 市/区
-              //   // console.log(`原始未拆分:${area}`);
-              //   let sheng = area.indexOf("省");
-              //   let qu = area.indexOf("自治区");
-              //   let shi = area.indexOf("市");
-
-              //   let area_province = "";
-              //   let area_city = "";
-              //   if(sheng != -1){
-              //     area_province = area.substring(0,sheng+1);
-              //     area_city = area.substring(sheng+1);
-
-              //   }else if(qu != -1){
-              //     area_province = area.substring(0,qu+3);
-              //     area_city = area.substring(qu+3);
-
-              //   }else if(shi != -1){
-              //     area_province = area.substring(0,shi+1);
-              //     area_city = area.substring(shi+1);
-
-              //   }else{
-              //     area_province = area;
-              //     area_city = area;
-              //   }
-
-              //   //遍历详细信息
-              //   let detail = "";
-              //   lis.each( (i)=> {
-              //     detail += lis.eq(i).text() + "-------";
-              //   });
-                // console.log(`详细信息:${detail}`);
 
                 //记录到数据库
                 connection.query(`SELECT id,area_country,area_province,area_city,access_count,update_time,log_date FROM area_ip WHERE area_origin='${area}'`, (error, results, fields)=> {
@@ -262,6 +206,7 @@ const run = async()=> {
 
 run();
 
+//------------------------测试--------------------------
 const api_taobao = async (ip)=> {
   let url = "http://ip.taobao.com/service/getIpInfo2.php";
   const ret = await postPromise({url:url,form:{ip:ip}});
@@ -286,10 +231,9 @@ const api_taobao = async (ip)=> {
       param.area_city = data.city;
     }
   }
-  return param;
+  console.log(param.area_country);
+  console.log(param.area_province);
+  console.log(param.area_city);
 }
-// let param = api_taobao('110.54.145.218');
 
-// console.log(param.area_country);
-// console.log(param.area_province);
-// console.log(param.area_city);
+// api_taobao('110.54.145.218');
