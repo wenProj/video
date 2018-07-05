@@ -28,4 +28,4 @@ CREATE TABLE `area_ip` (
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `log_date` datetime DEFAULT NULL COMMENT '来源日志文件的日期',
   PRIMARY KEY (`id`,`area_origin`)
-) ENGINE=InnoDB AUTO_INCREMENT=172 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
