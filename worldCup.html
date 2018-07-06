@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>2018世界杯</title>
+  <title>XL</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="./static/images/title_favicon.ico" mce_href="./static/images/title_favicon.ico" type="image/x-icon">
@@ -46,8 +46,10 @@
   <!-- angularJS请求node后端数据 -->
   <script>
     var app = angular.module('worldCup', []);
-    app.controller('worldCupCtrl', function($scope, $http) {
-      $http.get("http://localhost:5205/wcdata").then(function (response) {
+    app.controller('worldCupCtrl', function($scope, $http, $location) {
+      var url = $location.protocol() + "://" + $location.host() + ":" + $location.port();
+      console.log(url);
+      $http.get(url+"/wcdata").then(function (response) {
           $scope.match = response.data.data;
       });
     });
