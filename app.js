@@ -1,10 +1,9 @@
 const Koa = require('koa');
 const route = require('koa-route');
 const path = require('path');
-const serve = require('koa-static');
+const staticmodule = require('koa-static');
 const fs = require("fs");
 const app = new Koa();
-
 //数据Service
 const cupController = require('./app/controllers/worldcupContro');
 
@@ -15,23 +14,18 @@ const data = async ctx => {
   ctx.response.body = { data: data};
 }
 
-//static静态资源
-const static = serve(path.join(__dirname+"/static/move"));
+//static静态资源 html  js  css等
+const static = staticmodule(path.join(__dirname));
 
-//页面
-const html = ctx => {
-  console.log("访问路径"+ctx.request.path);
-  if(ctx.request.path !== "/"){
-    ctx.response.type = 'html';
-    ctx.response.body = fs.createReadStream('./'+ctx.request.path,'utf8');
-  }else{
-    //访问根目录 直接跳转到list.html
-    ctx.response.type = 'html';
-    ctx.response.body = fs.createReadStream('./list.html','utf8');
-  }
+//首页页面
+const index = ctx => {
+  //访问根目录 直接跳转到list.html
+  ctx.response.type = 'html';
+  ctx.response.body = fs.createReadStream('./list.html','utf8');
 }
 
+//注意app.use的顺序
 app.use(route.get('/wcdata',data));
-// app.use(static);//注意app.use的顺序
-app.use(html);
+app.use(route.get('/',index));
+app.use(static);
 app.listen(5205);
