@@ -51,7 +51,7 @@ video[ishivideo="true"]::media-controls{
     
     width: 100px;
     height: 100px;
-    background: url("images/play-big.png") no-repeat;
+    background: url("../images/play-big.png") no-repeat;
     background-size: 100px 100px;
     cursor: pointer;
 }
@@ -101,11 +101,11 @@ video[ishivideo="true"]::media-controls{
 }
 
 .hi-video-controlbar .video-play .onBtn{
-    background: url("./images/play.png") no-repeat;
+    background: url("../images/play.png") no-repeat;
 }
 
 .hi-video-controlbar .video-play .offBtn{
-    background: url("./images/pause.png") no-repeat;
+    background: url("../images/pause.png") no-repeat;
 }
 
 .hi-video-controlbar .progressbar{
@@ -231,11 +231,11 @@ video[ishivideo="true"]::media-controls{
 }
 
 .hi-video-controlbar .video-mute .onBtn{
-    background: url("./images/volume.png");
+    background: url("../images/volume.png");
 }
 
 .hi-video-controlbar .video-mute .offBtn{
-    background: url("./images/mute.png") no-repeat;
+    background: url("../images/mute.png") no-repeat;
 }
 
 .hi-video-controlbar .video-volume{
@@ -252,11 +252,11 @@ video[ishivideo="true"]::media-controls{
 }
 
 .hi-video-controlbar .video-fullscreen .onBtn{
-    background: url("./images/fullscreen.png") no-repeat;
+    background: url("../images/fullscreen.png") no-repeat;
 }
 
 .hi-video-controlbar .video-fullscreen .offBtn{
-    background: url("./images/fullscreen_off.png") no-repeat;
+    background: url("../images/fullscreen_off.png") no-repeat;
 }
 
 .rotate90{

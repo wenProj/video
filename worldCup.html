@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Bootstrap 实例</title>
+  <title>2018世界杯</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css">
   <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.min.js"></script>
   <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
 </head>
+
 <body>
 
-<div class="container">
+<div ng-app="worldCup" ng-controller="worldCupCtrl" class="container">
   <h2>2018世界杯结果统计</h2>         
   <table class="table table-striped">
     <thead class="thead-dark">
@@ -22,34 +24,33 @@
         <th>主队进球</th>
         <th>客队</th>
         <th>客队进球</th>
-        <th>胜利</th>
+        <th>Win</th>
         <th>比赛时间</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>A</td>
-        <td>世界杯A组第1轮</td>
-        <td>俄罗斯</td>
-        <td>5</td>
-        <td>沙特</td>
-        <td>0</td>
-        <td>俄罗斯</td>
-        <td>2018-06-14 23:00:00</td>
-      </tr>
-      <tr>
-        <td>A</td>
-        <td>世界杯A组第1轮</td>
-        <td>埃及</td>
-        <td>0</td>
-        <td>乌拉圭</td>
-        <td>1</td>
-        <td>乌拉圭</td>
-        <td>2018-06-15 20:00:00</td>
+      <tr ng-repeat="x in match">
+        <td>{{ x.match_group }}</td>
+        <td>{{ x.match_name }}</td>
+        <td>{{ x.home_team }}</td>
+        <td>{{ x.home_goal }}</td>
+        <td>{{ x.away_team }}</td>
+        <td>{{ x.away_goal }}</td>
+        <td>{{ x.victory }}</td>
+        <td>{{ x.match_date | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
       </tr>
     </tbody>
   </table>
 </div>
-
+  <!-- angularJS请求node后端数据 -->
+  <script>
+    var app = angular.module('worldCup', []);
+    app.controller('worldCupCtrl', function($scope, $http) {
+      $http.get("http://localhost:5205/wcdata").then(function (response) {
+          console.log(response.data.data);
+          $scope.match = response.data.data;
+      });
+    });
+    </script>
 </body>
 </html>

@@ -58,15 +58,15 @@ request(url, async (err, res, body) => {
           let rightGoal = everyfield.rightGoal;//客队进球
 
           //胜利  0未开赛 1 主队胜  2客队胜 3平
-          let victory = 0;
+          let victory = '未开赛';
           if(videoUrl != undefined){
             let temp = leftGoal-rightGoal;
             if(temp > 0){
-              victory = 1;
+              victory = leftName;
             }else if(temp < 0){
-              victory = 2;
+              victory = rightName;
             }else{
-              victory = 3;
+              victory = '平';
             }
           }
 
