@@ -34,7 +34,7 @@ var getIp = function(req) {
    
   ip = ip.replace(eval('/:/g'),'').replace(eval('/f/g'),'')// /转译 /g 标识为全部 
   // return ip;
-  console.log("客户端ip-----------"+ip);
+  console.log("客户端ip-----------:"+ip);
 };
 
 
