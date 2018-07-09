@@ -37,3 +37,38 @@ request(url, async (err, res, body) => {
     let shi = area.indexOf("市");
 
 });
+
+
+
+
+//------------------------测试--------------------------
+const api_taobao = async (ip)=> {
+  let url = "http://ip.taobao.com/service/getIpInfo2.php";
+  const ret = await postPromise({url:url,form:{ip:ip}});
+
+  let param = {
+    "area_country":"",
+    "let area_province":"",
+    "area_city":"",
+  };
+  //解析响应json
+  if(ret != undefined && ret.body != undefined && ret.body != ""){
+    let body = JSON.parse(ret.body)
+    if(body.code == '0'){
+      let data = body.data;
+      //省/市/区
+      if(data.country != ""){
+        param.area_country = data.country;
+      }else{
+        param.area_country = data.area;
+      }
+      param.area_province = data.region;
+      param.area_city = data.city;
+    }
+  }
+  console.log(param.area_country);
+  console.log(param.area_province);
+  console.log(param.area_city);
+}
+
+// api_taobao('110.54.145.218');

@@ -40,13 +40,13 @@ const run = async()=> {
       fs.readdir(path,(err,files)=>{
         if(err){
           console.log("读取日志目录出错...")
-      }else{
-        //添加到arr
-        files.forEach((filename) =>{
-          arrLogName.push(filename);
-        });
-        carryon3();
-      }
+        }else{
+          //添加到arr
+          files.forEach((filename) =>{
+            arrLogName.push(filename);
+          });
+          carryon3();
+        }
       });
     });
 
@@ -61,7 +61,7 @@ const run = async()=> {
         //查询log_date 最新日期，避免重复跑日志文件
 
         let flag = false;
-        await new Promise(async (carryon5)=> {
+        await new Promise((carryon5)=> {
           connection.query('SELECT log_date FROM area_ip WHERE 1=1 ORDER BY log_date DESC limit 1', function (error, results, fields) {
             if (error) {
               console.log(`数据库查询日志日期出错:${error}`);
@@ -208,35 +208,3 @@ const run = async()=> {
 }
 
 run();
-
-//------------------------测试--------------------------
-const api_taobao = async (ip)=> {
-  let url = "http://ip.taobao.com/service/getIpInfo2.php";
-  const ret = await postPromise({url:url,form:{ip:ip}});
-
-  let param = {
-    "area_country":"",
-    "let area_province":"",
-    "area_city":"",
-  };
-  //解析响应json
-  if(ret != undefined && ret.body != undefined && ret.body != ""){
-    let body = JSON.parse(ret.body)
-    if(body.code == '0'){
-      let data = body.data;
-      //省/市/区
-      if(data.country != ""){
-        param.area_country = data.country;
-      }else{
-        param.area_country = data.area;
-      }
-      param.area_province = data.region;
-      param.area_city = data.city;
-    }
-  }
-  console.log(param.area_country);
-  console.log(param.area_province);
-  console.log(param.area_city);
-}
-
-// api_taobao('110.54.145.218');
