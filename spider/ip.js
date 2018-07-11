@@ -7,6 +7,7 @@ var mysql = require('mysql');
 const config =  require(`../config/mysql_test.js`);
 const {promisify} = require('util');
 const postPromise = promisify(request.post);
+const logger = require('../config/logInit.js').createLogger("area_ip");
 
 //时间转为字符串 yyyy-MM-dd
 let dateToString = function(d){
@@ -22,7 +23,7 @@ let dateToString = function(d){
 }
 
 const run = async()=> {
-
+    let begin = new Date();
     //创建mysql连接
     var connection = mysql.createConnection({
       host : config.host,
@@ -125,6 +126,7 @@ const run = async()=> {
           //遍历ip数组
           console.log(`ip数组长度:${arr.length}`);
           for(let i in arr){
+            // logger.log("info",`ip:${arr[i]}`);
             console.log(`ip:${arr[i]}`);
             await new Promise(async (carryon2)=> {
               try {
@@ -167,7 +169,8 @@ const run = async()=> {
                           console.log(`数据库修改出错:${error}`);
                           // throw error;
                         }
-                        console.log(`修改,访问量累加---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`)
+                        // logger.log("info",`修改,访问量累加---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`);
+                        console.log(`修改,访问量累加---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`);
                         if(result != undefined && result.affectedRows == 1){//修改数据成功
                           //循环下一个ip
                           carryon2();
@@ -183,7 +186,8 @@ const run = async()=> {
                           console.log(`数据库新增出错:${error}`);
                           // throw error;
                         }
-                        console.log(`新增,该地区记录---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`)
+                        // logger.log("info",`新增,该地区记录---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`);
+                        console.log(`新增,该地区记录---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`);
                         if(result != undefined && result.affectedRows == 1){//插入数据成功
                           //循环下一个ip
                           carryon2();
@@ -205,6 +209,8 @@ const run = async()=> {
       });
     }
     connection.end(); //关闭连接
+    let end = new Date();
+    console.log(`总共耗时:${(end-begin)/60000}分钟`);
 }
 
 run();
