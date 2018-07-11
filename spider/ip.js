@@ -7,7 +7,7 @@ var mysql = require('mysql');
 const config =  require(`../config/mysql_test.js`);
 const {promisify} = require('util');
 const postPromise = promisify(request.post);
-const logger = require('../config/logInit.js').createLogger("area_ip");
+// const logger = require('../config/logInit.js').createLogger("area_ip");
 
 //时间转为字符串 yyyy-MM-dd
 let dateToString = function(d){

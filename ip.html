@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IP统计</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="./static/images/poss.png" mce_href="./static/images/poss.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
+</head>
+
+<body>
+<div ng-app="ip" ng-controller="ipCtrl" class="container">
+  <h2>大强-访问IP统计</h2>         
+  <table class="table table-striped" style="text-align: center;">
+    <thead class="thead-dark">
+      <tr>
+        <th>序号</th>
+        <th>国家/地区</th>
+        <th>省份</th>
+        <th>城市</th>
+        <th>访问量</th>
+        <th>该地区最后一个访问IP</th>
+        <th>更新时间</th>
+        <th>日志日期</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="x in match">
+        <td>{{ $index+1 }}</td>
+        <td>{{ x.area_country }}</td>
+        <td>{{ x.area_province }}</td>
+        <td>{{ x.area_city }}</td>
+        <td>{{ x.access_count }}</td>
+        <td>{{ x.last_access_ip }}</td>
+        <td>{{ x.update_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td>{{ x.log_date | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+  <!-- angularJS请求node后端数据 -->
+  <script type="text/javascript">
+    var app = angular.module('ip', []);
+    app.controller('ipCtrl', function($scope, $http, $location) {
+      var url = $location.protocol() + "://" + $location.host() + ":" + $location.port();
+      // console.log(url);
+      $http.get(url+"/ip").then(function (response) {
+        console.log(JSON.stringify(response.data.data));
+        $scope.match = response.data.data;
+      });
+    });
+  </script>
+</body>
+</html>

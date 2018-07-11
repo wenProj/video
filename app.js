@@ -4,13 +4,22 @@ const path = require('path');
 const staticmodule = require('koa-static');
 const fs = require("fs");
 const app = new Koa();
-//数据Service
+//查询数据库
 const cupController = require('./app/controllers/worldcupContro');
+const ipContro = require('./app/controllers/ipContro');
 
-//获取数据
+//获取世界杯数据
 const data = async ctx => {
   getIp(ctx.request);
   let data = await cupController.getdata(ctx.request);
+  ctx.response.type = 'json';
+  ctx.response.body = { data: data};
+}
+
+//获取大强小强ip数据
+const ip = async ctx => {
+  getIp(ctx.request);
+  let data = await ipContro.getdata(ctx.request);
   ctx.response.type = 'json';
   ctx.response.body = { data: data};
 }
@@ -40,6 +49,7 @@ var getIp = function(req) {
 
 //注意app.use的顺序
 app.use(route.get('/wcdata',data));
+app.use(route.get('/ip',ip));
 app.use(route.get('/',index));
 app.use(static);
-app.listen(5205);
+app.listen(8083);//5205
