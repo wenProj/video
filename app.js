@@ -21,7 +21,7 @@ const ip = async ctx => {
   getIp(ctx.request);
   let data = await ipContro.getdata(ctx.request);
   ctx.response.type = 'json';
-  ctx.response.body = { data: data};
+  ctx.response.body = data;
 }
 
 //static静态资源 html  js  css等

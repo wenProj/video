@@ -14,7 +14,7 @@
 
 <body>
 <div ng-app="ip" ng-controller="ipCtrl" class="container">
-  <h2>大强-访问IP统计</h2>         
+  <h2>大强-访问IP统计 <span style="float: right">总访问量:{{ sum }}</span></h2>
   <table class="table table-striped" style="text-align: center;">
     <thead class="thead-dark">
       <tr>
@@ -51,6 +51,7 @@
       $http.get(url+"/ip").then(function (response) {
         console.log(JSON.stringify(response.data.data));
         $scope.match = response.data.data;
+        $scope.sum = response.data.access_count_sum;
       });
     });
   </script>

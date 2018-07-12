@@ -11,6 +11,12 @@ exports.getdata = async data => {//data请求参数
     });
     connection.connect();
 
+    let res = { 
+        data: '',
+        access_count_sum: ''
+    };
+
+    //所有记录
     let datas = new Array();
     await new Promise(async (carryon1)=> {
         //记录到数据库
@@ -23,11 +29,25 @@ exports.getdata = async data => {//data请求参数
                 for(let i in results){
                     datas.push(results[i]);
                 }
-                carryon1();
+                res.data = datas;
+                
+                //查询总记录数
+                connection.query(`SELECT sum(access_count) as access_count_sum FROM area_ip WHERE 1=1`, (error, results, fields)=> {
+                    if (error) {
+                        console.log(`数据库查询出错:${error}`);
+                        // throw error;
+                    };
+                    if(results.length > 0){
+                        res.access_count_sum = results[0].access_count_sum;
+                        //放行
+                        carryon1();
+                    }
+                });
             }
         });
-    });
 
+    });
+    
     connection.end();
-    return datas;
+    return res;
 }
