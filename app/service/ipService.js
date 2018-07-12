@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const config =  require(`../../config/mysql_test.js`);
 
-exports.getdata = async data => {//data请求参数
+let getdata = async data => {//data请求参数
     //创建mysql连接
     var connection = mysql.createConnection({
         host : config.host,
@@ -50,4 +50,8 @@ exports.getdata = async data => {//data请求参数
     
     connection.end();
     return res;
+}
+
+module.exports={
+    getdata:getdata
 }

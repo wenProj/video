@@ -2,7 +2,7 @@ const mysql = require('mysql');
 const config =  require(`../../config/mysql_test`);
 const worldCup = require('../models/world_cup')
 
-// exports.getdata = async data => {//data请求参数
+// let getdata1 = async data => {//data请求参数
 //     //创建mysql连接
 //     var connection = mysql.createConnection({
 //         host : config.host,
@@ -34,7 +34,12 @@ const worldCup = require('../models/world_cup')
 // }
 
 //使用sequelize框架
-exports.getdata = async data=>{
+let getdata2 = async data=>{
     let datas = await worldCup.db().findAll();
     return datas;
 };
+
+module.exports={
+    // getdata:getdata1,
+    getdata:getdata2
+}
