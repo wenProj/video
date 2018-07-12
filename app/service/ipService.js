@@ -1,5 +1,12 @@
 const mysql = require('mysql');
 const config =  require(`../../config/mysql_test.js`);
+const areaIp = require('../models/areaIp')
+
+//统一返回值
+let res = { 
+    data: '',
+    access_count_sum: ''
+};
 
 let getdata = async data => {//data请求参数
     //创建mysql连接
@@ -10,11 +17,6 @@ let getdata = async data => {//data请求参数
         database : config.database
     });
     connection.connect();
-
-    let res = { 
-        data: '',
-        access_count_sum: ''
-    };
 
     //所有记录
     let datas = new Array();
@@ -52,6 +54,20 @@ let getdata = async data => {//data请求参数
     return res;
 }
 
+//使用sequelize框架
+let getdata2 = async data=>{
+
+    let datas = await areaIp.db().findAll({
+        'order': [['access_count', 'DESC']]
+    });
+    res.data = datas;
+
+    let sum = await areaIp.db().sum('access_count');
+    res.access_count_sum = sum;
+
+    return res;
+};
+
 module.exports={
-    getdata:getdata
+    getdata:getdata2
 }

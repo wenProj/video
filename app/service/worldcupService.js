@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const config =  require(`../../config/mysql_test`);
-const worldCup = require('../models/world_cup')
+const worldCup = require('../models/worldCup')
 
 // let getdata1 = async data => {//data请求参数
 //     //创建mysql连接
