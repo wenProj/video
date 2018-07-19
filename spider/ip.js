@@ -7,7 +7,7 @@ var mysql = require('mysql');
 const config =  require(`../config/mysql_test.js`);
 const {promisify} = require('util');
 const postPromise = promisify(request.post);
-// const logger = require('../config/logInit.js').createLogger("area_ip");
+const logger = require('../config/logInit.js').createLogger("area_ip");
 
 //格式化日期
 Date.prototype.Format = function (fmt) { //author: meizz
@@ -44,6 +44,7 @@ const run = async()=> {
     await new Promise((carryon3)=> {
       fs.readdir(path,(err,files)=>{
         if(err){
+          logger.log("info","读取日志目录出错...")
           console.log("读取日志目录出错...")
         }else{
           //添加到arr
@@ -60,6 +61,7 @@ const run = async()=> {
       //当每个日志文件读取完后，在读取下一个
       await new Promise(async (carryon4)=> {
         let filename = arrLogName[i];
+        logger.log("info","-------------------日志文件------------"+filename);
         console.log("-------------------日志文件------------"+filename);
         //提取日志文件日期
         let logdate = filename.trim().replace("ipLog.log.","");
@@ -69,6 +71,7 @@ const run = async()=> {
         await new Promise((carryon5)=> {
           connection.query('SELECT log_date FROM area_ip WHERE 1=1 ORDER BY log_date DESC limit 1', function (error, results, fields) {
             if (error) {
+              logger.log("info",`数据库查询日志日期出错:${error}`);
               console.log(`数据库查询日志日期出错:${error}`);
               carryon5();
             };
@@ -117,6 +120,7 @@ const run = async()=> {
             });
 
             objReadline.on('close',function(){
+              logger.log("info","-------------------读取完毕");
               console.log("-------------------读取完毕");
               //继续执行
               carryon1();
@@ -128,84 +132,33 @@ const run = async()=> {
           });
 
           //遍历ip数组
+          logger.log("info",`ip数组长度:${arr.length}`);
           console.log(`ip数组长度:${arr.length}`);
           for(let i in arr){
-            // logger.log("info",`ip:${arr[i]}`);
-            console.log(`ip:${arr[i]}`);
-            await new Promise(async (carryon2)=> {
-              try {
-                let url = "http://ip.taobao.com/service/getIpInfo2.php";
-                const ret = await postPromise({url:url,form:{ip:arr[i]}});
-              
-                let area_country = "";
-                let area_province = "";
-                let area_city = "";
-                //解析响应json
-                if(ret != undefined && ret.body != undefined && ret.body != ""){
-                  let body = JSON.parse(ret.body)
-                  if(body.code == '0'){
-                    let data = body.data;
-                    //省/市/区
-                    if(data.country != ""){
-                      area_country = data.country;
-                    }else{
-                      area_country = data.area;
-                    }
-                    area_province = data.region;
-                    area_city = data.city;
+            let ip = arr[i].trim();//去除空格
+            logger.log("info",`ip:${ip}`);
+            console.log(`ip:${ip}`);
+            await new Promise(async (carryon2)=> {                
+                let res = await postIp(ip,logdate,connection,carryon2);
+                
+                //说明上次抓取有异常
+                if(res != undefined && res == "1"){
+                  logger.log("info","------------第一遍抓取出错,等待3秒------------");
+                  console.log("------------第一遍抓取出错,等待3秒------------");
+
+                  //等待3秒再走一次抓取
+                  await new Promise((carryon6)=> {
+                    setTimeout(()=>{carryon6()},3000);
+                  });
+                  
+                  logger.log("info","------------相同IP再抓取一次------------");
+                  console.log("------------相同IP再抓取一次------------");
+
+                  let res2 = await postIp(ip,logdate,connection,carryon2);
+                  if(res2 != undefined && res2 == "1"){//还有异常：这条ip暂放不抓取
+                    carryon2()
                   }
                 }
-                //地区未拆分，用于area_origin和查询条件
-                let area = area_country+area_province+area_city;
-  
-                  //记录到数据库
-                  connection.query(`SELECT id,area_country,area_province,area_city,access_count,update_time,log_date FROM area_ip WHERE area_origin='${area}'`, (error, results, fields)=> {
-                    if (error) {
-                      console.log(`数据库查询出错:${error}`);
-                      // throw error;
-                    };
-                    if(results.length == 1){
-                      //修改记录access_count累加
-                      var updateSql = 'UPDATE area_ip SET access_count = access_count+1,log_date=?,last_access_ip=? WHERE area_origin = ?';
-                      var updateSqlParams = [logdate,arr[i],area];
-                      connection.query(updateSql,updateSqlParams,function (error, result) {
-                        if(error){
-                          console.log(`数据库修改出错:${error}`);
-                          // throw error;
-                        }
-                        // logger.log("info",`修改,访问量累加---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`);
-                        console.log(`修改,访问量累加---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`);
-                        if(result != undefined && result.affectedRows == 1){//修改数据成功
-                          //循环下一个ip
-                          carryon2();
-                        }
-                      });
-                    }else if(results.length == 0){
-                      //新增记录access_count=1
-                      var  addSql = 'INSERT INTO area_ip(area_origin,area_country,area_province,area_city,access_count,last_access_ip,update_time,log_date) VALUES(?,?,?,?,?,?,?,?)'; //id自增
-                      var  addSqlParams = [area,area_country,area_province,area_city,1,arr[i],new Date(),logdate]; //可接受传递参数++++++++++++++++日志后缀日期
-  
-                      connection.query(addSql,addSqlParams,function (error, result) {
-                        if(error){
-                          console.log(`数据库新增出错:${error}`);
-                          // throw error;
-                        }
-                        // logger.log("info",`新增,该地区记录---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`);
-                        console.log(`新增,该地区记录---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${arr[i]}---log_date:${logdate}`);
-                        if(result != undefined && result.affectedRows == 1){//插入数据成功
-                          //循环下一个ip
-                          carryon2();
-                        }
-                      });
-                    }
-                  });
-  
-                  // console.log('----------------------跑完一条--------------------------');
-                  // setTimeout(()=>{carryon2()},3000);//3秒
-              } catch (error) {
-                console.log(`抓取api报错${error}------继续抓取下一个....`);
-                carryon2();
-              }
             });
           }
         }
@@ -214,7 +167,94 @@ const run = async()=> {
     }
     connection.end(); //关闭连接
     let end = new Date();
+    logger.log("info",`总共耗时:${(end-begin)/60000}分钟`);
     console.log(`总共耗时:${(end-begin)/60000}分钟`);
+}
+
+//抓取单个IP,记录入库
+let postIp = async (ip,logdate,connection,carryon2) => {
+  try {
+    let url = "http://ip.taobao.com/service/getIpInfo2.php";
+    const ret = await postPromise({url:url,form:{ip:ip}});
+
+    let area_country = "";
+    let area_province = "";
+    let area_city = "";
+    //解析响应json
+    if(ret != undefined && ret.body != undefined && ret.body != ""){
+      let body = JSON.parse(ret.body)
+      if(body.code == '0'){
+        let data = body.data;
+        //省/市/区
+        if(data.country != ""){
+          area_country = data.country;
+        }else{
+          area_country = data.area;
+        }
+        area_province = data.region;
+        area_city = data.city;
+      }
+    }
+    //地区未拆分，用于area_origin和查询条件
+    let area = area_country+area_province+area_city;
+    //出现地区为空 在抓取一次
+    if(area.trim().length == 0){
+      throw new Error("area_origin为空,抛出异常,再次抓取----------------------");
+    }
+
+    //记录到数据库
+    connection.query(`SELECT id,area_country,area_province,area_city,access_count,update_time,log_date FROM area_ip WHERE area_origin='${area}'`, (error, results, fields)=> {
+      if (error) {
+        logger.log("info",`数据库查询出错:${error}`);
+        console.log(`数据库查询出错:${error}`);
+        // throw error;
+      };
+      
+      if(results.length == 1){
+        //修改记录access_count累加
+        var updateSql = 'UPDATE area_ip SET access_count = access_count+1,log_date=?,last_access_ip=? WHERE area_origin = ?';
+        var updateSqlParams = [logdate,ip,area];
+        connection.query(updateSql,updateSqlParams,function (error, result) {
+          if(error){
+            logger.log("info",`数据库修改出错:${error}`);
+            console.log(`数据库修改出错:${error}`);
+            // throw error;
+          }
+          logger.log("info",`修改,访问量累加---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${ip}---log_date:${logdate}`);
+          console.log(`修改,访问量累加---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${ip}---log_date:${logdate}`);
+          if(result != undefined && result.affectedRows == 1){//修改数据成功
+            //循环下一个ip
+            carryon2();
+          }
+        });
+      }else if(results.length == 0){
+        //新增记录access_count=1
+        var  addSql = 'INSERT INTO area_ip(area_origin,area_country,area_province,area_city,access_count,last_access_ip,update_time,log_date) VALUES(?,?,?,?,?,?,?,?)'; //id自增
+        var  addSqlParams = [area,area_country,area_province,area_city,1,ip,new Date(),logdate]; //可接受传递参数++++++++++++++++日志后缀日期
+
+        connection.query(addSql,addSqlParams,function (error, result) {
+          if(error){
+            console.log(`数据库新增出错:${error}`);
+            // throw error;
+          }
+
+          logger.log("info",`新增,该地区记录---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${ip}---log_date:${logdate}`);
+          console.log(`新增,该地区记录---area_country:${area_country}---area_province:${area_province}---area_city:${area_city}---last_access_ip:${ip}---log_date:${logdate}`);
+          if(result != undefined && result.affectedRows == 1){//插入数据成功
+            //循环下一个ip
+            carryon2();
+          }
+        });
+      }
+    });
+      
+    // console.log('----------------------跑完一条--------------------------');
+    // setTimeout(()=>{carryon2()},3000);//3秒
+  } catch (error) {
+    logger.log("info",`------------抓取api报错${error}------------`);
+    console.log(`------------抓取api报错${error}------------`);
+    return "1";//代表改这次抓取有异常
+  }
 }
 
 run();
