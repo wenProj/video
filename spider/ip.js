@@ -14,7 +14,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
   var o = {
       "M+": this.getMonth() + 1, //月份
       "d+": this.getDate(), //日
-      "h+": this.getHours(), //小时
+      "H+": this.getHours(), //小时
       "m+": this.getMinutes(), //分
       "s+": this.getSeconds(), //秒
       "q+": Math.floor((this.getMonth() + 3) / 3), //季度

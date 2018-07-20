@@ -24,6 +24,14 @@ const ip = async ctx => {
   ctx.response.body = data;
 }
 
+//下载Excel
+const excel = async ctx => {
+  getIp(ctx.request);
+  let data = await ipContro.getExcel(ctx.request);
+  ctx.response.type = 'json';
+  ctx.response.body = data;
+}
+
 //static静态资源 html  js  css等
 const static = staticmodule(path.join(__dirname));
 
@@ -50,6 +58,7 @@ var getIp = function(req) {
 //注意app.use的顺序
 app.use(route.get('/wcdata',data));
 app.use(route.get('/ip',ip));
+app.use(route.get('/excel',excel));
 app.use(route.get('/',index));
 app.use(static);
 app.listen(8083);//5205

@@ -14,7 +14,7 @@
 
 <body>
 <div ng-app="ip" ng-controller="ipCtrl" class="container">
-  <h2>大强-访问IP统计 <span style="float: right">总访问量:{{ sum }}</span></h2>
+  <br/><h2>大强-访问IP统计 <button type="button" style="float: right;background-color: #212529;color: #fff" class="btn btn-default" ng-click="excel()"><b>下载Excel</b></button><span style="float: right">总访问量:{{ sum }}&emsp;&emsp;</span></h2>
   <table class="table table-striped" style="text-align: center;">
     <thead class="thead-dark">
       <tr>
@@ -47,13 +47,21 @@
     var app = angular.module('ip', []);
     app.controller('ipCtrl', function($scope, $http, $location) {
       var url = $location.protocol() + "://" + $location.host() + ":" + $location.port();
-      // console.log(url);
       $http.get(url+"/ip").then(function (response) {
-        console.log(JSON.stringify(response.data.data));
+        // console.log(JSON.stringify(response.data.data));
         $scope.match = response.data.data;
         $scope.sum = response.data.access_count_sum;
       });
+
+      //下载Excel函数
+      $scope.excel = ()=>{
+        $http.get(url+"/excel").then(function (response) {
+        console.log(JSON.stringify(response.data));
+      });
+      }
     });
+
+    //点击下载Excel
   </script>
 </body>
 </html>
