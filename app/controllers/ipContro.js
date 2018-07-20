@@ -25,20 +25,27 @@ let getdata = async ctx => {
 }
 
 let getExcel = async ctx => {
-    const result = (await ipService.getdata()).data;
-    let data = [["序号", "国家", "省份", "城市", "访问量", "该地区最后一个访问IP", "更新时间", "日志日期"]],
+    const result = (await ipService.getdata());
+    let data = [["序号", "国家", "省份", "城市", "访问量", "该地区最后一个访问IP", "日志日期", "更新时间","","总访问量"]],
         fileName = "DQIP." + new Date().Format("yyyy-MM-dd"),
         filePath = "C:\\Users\\test03\\Desktop\\" + fileName + ".xlsx";
-    for (let i = 0; i < result.length; i++) {
+        
+    let datas = result.data;
+    for (let i = 0; i < datas.length; i++) {
         let ipExcel = [];
         ipExcel.push(i+1);
-        ipExcel.push(result[i].area_country);
-        ipExcel.push(result[i].area_province);
-        ipExcel.push(result[i].area_city);
-        ipExcel.push(result[i].access_count);
-        ipExcel.push(result[i].last_access_ip);
-        ipExcel.push(result[i].update_time.Format("yyyy-MM-dd HH:mm:ss"));
-        ipExcel.push(result[i].log_date.Format("yyyy-MM-dd"));
+        ipExcel.push(datas[i].area_country);
+        ipExcel.push(datas[i].area_province);
+        ipExcel.push(datas[i].area_city);
+        ipExcel.push(datas[i].access_count);
+        ipExcel.push(datas[i].last_access_ip);
+        ipExcel.push(datas[i].log_date.Format("yyyy-MM-dd"));
+        ipExcel.push(datas[i].update_time.Format("yyyy-MM-dd HH:mm:ss"));
+        //添加总访问量
+        if(i == 0){
+            ipExcel.push('');
+            ipExcel.push(result.access_count_sum);
+        }
         data.push(ipExcel);
     }
     let buffer = xlsx.build([{ name: fileName, data: data }]);

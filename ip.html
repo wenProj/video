@@ -24,8 +24,8 @@
         <th>城市</th>
         <th>访问量</th>
         <th>该地区最后一个访问IP</th>
-        <th>更新时间</th>
         <th>日志日期</th>
+        <th>更新时间</th>
       </tr>
     </thead>
     <tbody>
@@ -36,8 +36,8 @@
         <td>{{ x.area_city }}</td>
         <td>{{ x.access_count }}</td>
         <td>{{ x.last_access_ip }}</td>
-        <td>{{ x.update_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
         <td>{{ x.log_date | date : 'yyyy-MM-dd'}}</td>
+        <td>{{ x.update_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
       </tr>
     </tbody>
   </table>
