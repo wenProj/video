@@ -4,7 +4,7 @@ var sequelize = require('../../config/sequelize_db');//数据库配置
 /* jshint indent: 1 */
 
 let db = () => {
-	return sequelize.define('fundoutOrder', {
+	return sequelize.define('worldCup', {
 		id: {
 			type: Sequelize.BIGINT(16).UNSIGNED,
 			allowNull: false,

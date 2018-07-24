@@ -20,9 +20,10 @@ function request (url, callback) {
 let url = 'http://matchweb.sports.qq.com/matchUnion/list?startTime=2018-06-14&endTime=2018-07-20&columnId=4&index=0&callback=jQuery111306566127390863624_1530605681640&_=1530605681641';
 request(url, async (err, res, body) => {
     let html = iconv.decode(body, 'gb2312');
+    
     //截取非json部分
     html = html.replace("jQuery111306566127390863624_1530605681640(","");
-    html = html.replace(")","");
+    html = html.replace("})","}");
     // console.log(html);
     let data = JSON.parse(html).data
 
