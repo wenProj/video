@@ -143,12 +143,12 @@ const run = async()=> {
                 
                 //说明上次抓取有异常
                 if(res != undefined && res == "1"){
-                  logger.log("info","------------第一遍抓取出错,等待3秒------------");
-                  console.log("------------第一遍抓取出错,等待3秒------------");
+                  logger.log("info","------------第一遍抓取出错,等待5秒------------");
+                  console.log("------------第一遍抓取出错,等待5秒------------");
 
-                  //等待3秒再走一次抓取
+                  //等待5秒再走一次抓取
                   await new Promise((carryon6)=> {
-                    setTimeout(()=>{carryon6()},3000);
+                    setTimeout(()=>{carryon6()},5000);
                   });
                   
                   logger.log("info","------------相同IP再抓取一次------------");
