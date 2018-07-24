@@ -61,7 +61,7 @@
             <button hivideoId="muteBtn" class="onBtn"></button> \
             </div> \
             <div class="video-volume float"> \
-            <input type="range" hivideoId="volumebar" class="volumebar" value="10" min="0" max="100" step="0.1"> \
+            <input type="range" hivideoId="volumebar" class="volumebar" value="100" min="0" max="100" step="0.1"> \
             </div> \
             <div class="video-fullscreen float"> \
             <button hivideoId="fullBtn" class="onBtn"></button> \
