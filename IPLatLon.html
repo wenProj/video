@@ -14,7 +14,7 @@
 
         var ip = $("#ip").val();
         console.log(ip);
-        $.get("http://ip-api.com/json/"+ip+"?fields=520191&lang=en",function(data,status){
+        $.get("http://ip-api.com/json/"+ip,function(data,status){
             if(status == "success"){
                 console.log(JSON.stringify(data));console.log("经度："+data.lon);console.log("经度："+data.lat);
 
