@@ -1,0 +1,11 @@
+{	
+	"size":"6",
+	"动画电影":[
+		{"name":"爱宠大机密","URI":"/index.html?name=acdjm.mp4","size":"","time":"","des":""},
+		{"name":"疯狂动物城","URI":"/index.html?name=xiaolian.mp4","size":"","time":"","des":""},
+		{"name":"起风了","URI":"/index.html?name=qfl.mp4","size":"","time":"","des":""},
+		{"name":"马达加斯加3","URI":"/index.html?name=mdjsj3.mp4","size":"","time":"","des":""},
+		{"name":"龙猫","URI":"/index.html?name=lm.mp4","size":"","time":"","des":""},
+		{"name":"兰戈","URI":"/index.html?name=lg.mp4","size":"","time":"","des":""}
+	]	
+}
