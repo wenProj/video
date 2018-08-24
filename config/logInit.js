@@ -17,7 +17,7 @@ require('winston-daily-rotate-file');
 // })]
 const logOutputConfig = [new transports.Console(), new transports.DailyRotateFile({
     name:'info-file',
-    filename:'C:/Users/test03/Desktop/area_ip_log/area_ip.log',
+    filename:'C:/Users/test03/Desktop/area_ip_log/ipLonLat.log',//area_ip3
     datePattern: 'YYYY-MM-DD',
     level:'info',
     maxFiles: '14d'
