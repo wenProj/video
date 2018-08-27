@@ -52,9 +52,9 @@ const run = async()=> {
     let begin = new Date();
     //创建mysql连接
     var connection = mysql.createConnection({
-      host : 'rm-wz9g2qn3s677uo0k9.mysql.rds.aliyuncs.com',
-      user : 'dev',
-      password : 'Xqiangpay12345',
+      host : 'universe.cluster-ro-c0sdt8ew9eze.ap-southeast-1.rds.amazonaws.com',
+      user : 'dqpay',
+      password : 'kVmffV&p',
       database : 'ipLonLat'
     });
     connection.connect();
