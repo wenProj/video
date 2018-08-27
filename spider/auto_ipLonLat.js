@@ -86,7 +86,7 @@ const run = async()=> {
         logger.log("info","-------------------日志文件------------"+filename);
         console.log("-------------------日志文件------------"+filename);
         //提取日志文件日期
-        let logdate = filename.trim().replace("ipLog.log.","");
+        let logdate = filename.trim().replace("latitude_longitude.log.","");
         //查询log_date 最新日期，避免重复跑日志文件
 
         let flag = false;
