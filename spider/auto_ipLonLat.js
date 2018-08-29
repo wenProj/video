@@ -15,7 +15,7 @@ const logFormat = printf(log => {
 require('winston-daily-rotate-file');
 const logOutputConfig = [new transports.Console(), new transports.DailyRotateFile({
   name:'info-file',
-  filename:'C:/Users/test03/Desktop/area_ip_log/ipLonLat',
+  filename:'/datalog/logs/latitude_longitude/ipLonLat',
   datePattern: 'YYYY-MM-DD',
   level:'info',
   maxFiles: '14d'
@@ -61,7 +61,7 @@ const run = async()=> {
 
     //读取日志目录下的所有日志文件
     let arrLogName = new Array();//用于放日志文件名
-    let path = "C:\\Users\\test03\\Desktop\\log\\";
+    let path = "/datalog/logs/latitude_longitude/";
     //读取完所有日志后，才执行遍历每个日志
     await new Promise((carryon3)=> {
       fs.readdir(path,(err,files)=>{
@@ -89,9 +89,9 @@ const run = async()=> {
         let logdate = filename.trim().replace("latitude_longitude.log.","");
         //查询log_date 最新日期，避免重复跑日志文件
 
-        let flag = false;
-        if(logdate.length == 10){
-          await new Promise((carryon5)=> {
+	      let flag = false;
+	      if(logdate.length == 10){
+	        await new Promise((carryon5)=> {
             connection.query('SELECT log_date FROM ip_lonlat WHERE 1=1 ORDER BY log_date DESC limit 1', function (error, results, fields) {
               if (error) {
                 logger.log("info",`数据库查询日志日期出错:${error}`);
@@ -105,16 +105,16 @@ const run = async()=> {
                 }else{
                   flag = false;
                   carryon5();
-                }
+                }	
               }else{
                 //数据库无记录，此时全部日志新增
                 flag = true;
                 carryon5();
               }
             });
-          });
+	        });
         }
-
+        
         if(flag){
           //读取每个ip日志文件
           let arr = new Array();//用于放ip
@@ -314,6 +314,7 @@ const run = async()=> {
               
                   connection.query(addSql,addSqlParams,function (error, result) {
                     if(error){
+                      logger.log("info",`数据库新增出错:${error}`);
                       console.log(`数据库新增出错:${error}`);
                       // throw error;
                       carryon2();
@@ -336,6 +337,12 @@ const run = async()=> {
                 }
                 // temp--;
               });
+            }else{
+              logger.log("info",`------------该行数据没有会员号，不查询：${key1.trim()}------------`);
+              console.log(`------------该行数据没有会员号，不查询：${key1.trim()}------------`);
+              var addSql = 'INSERT INTO 2018_08_21(member_id,lon,lat,area_origin,area_country,area_province,area_city,access_count,last_access_ip,update_time,log_date,des) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)'; //id自增
+              var addSqlParams = ['','','','','','','',accessCountFromDistinctObj,'',new Date(),logdate,`数据格式错误:${key1.trim()}`]; //可接受传递参数++++++++++++++++日志后缀日期
+              connection.query(addSql,addSqlParams,function (error, result) {});
             }
             des = "";
             accessCountFromDistinctObj = 1;
