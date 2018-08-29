@@ -288,6 +288,7 @@ const run = async()=> {
               
                   connection.query(addSql,addSqlParams,function (error, result) {
                     if(error){
+                      logger.log("info",`数据库新增出错:${error}`);
                       console.log(`数据库新增出错:${error}`);
                       // throw error;
                       carryon2();
@@ -310,6 +311,9 @@ const run = async()=> {
                 }
                 // temp--;
               });
+            }else{
+              logger.log("info",`------------该行数据没有会员号，不查询：${key1.trim()}------------`);
+              console.log(`------------该行数据没有会员号，不查询：${key1.trim()}------------`);
             }
             des = "";
             accessCountFromDistinctObj = 1;
