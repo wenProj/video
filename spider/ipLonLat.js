@@ -5,7 +5,7 @@ const fs = require("fs");
 var readline = require('readline');
 var mysql = require('mysql');
 const config =  require(`../config/mysql_test.js`);
-const logger = require('../config/logInit.js').createLogger("2018_08_23");
+const logger = require('../config/logInit.js').createLogger("2018_08_21");
 
 //格式化日期
 Date.prototype.Format = function (fmt) { //author: meizz
@@ -67,7 +67,7 @@ const run = async()=> {
 
         let flag = false;
         await new Promise((carryon5)=> {
-          connection.query('SELECT log_date FROM 2018_08_23 WHERE 1=1 ORDER BY log_date DESC limit 1', function (error, results, fields) {
+          connection.query('SELECT log_date FROM 2018_08_21 WHERE 1=1 ORDER BY log_date DESC limit 1', function (error, results, fields) {
             if (error) {
               logger.log("info",`数据库查询日志日期出错:${error}`);
               console.log(`数据库查询日志日期出错:${error}`);
@@ -179,9 +179,7 @@ const run = async()=> {
             console.log(`ip:${key1}`);
             
             if(member_id != ""){
-              // var temp = 1;
-              await new Promise(async (carryon2)=> {
-                // temp++;              
+              await new Promise(async (carryon2)=> {     
                 try {
                   let area = "";
                   let area_latlon = "";
@@ -225,11 +223,6 @@ const run = async()=> {
                             }
                         });
 
-                        // if(temp == 1){
-                        //   setTimeout(()=>{console.log("抓取IP阻塞，等待10秒执行........................................");
-                        //   carryon7()},10000);//10秒
-                        // }
-
                       });                    
                     }
 
@@ -264,12 +257,6 @@ const run = async()=> {
                             carryon8();
                           }
                         });
-                        
-                        // if(temp == 1){
-                        //   setTimeout(()=>{console.log("抓取经纬度阻塞，等待10秒执行........................................");
-                        //   carryon8()},10000);//10秒
-                        // }
-
                       });
                     }
 
@@ -283,7 +270,7 @@ const run = async()=> {
               
                   //记录到数据库
                   //新增记录access_count=accessCountFromDistinctObj  去重后重复值
-                  var  addSql = 'INSERT INTO 2018_08_23(member_id,lon,lat,area_origin,area_country,area_province,area_city,access_count,last_access_ip,update_time,log_date,des) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)'; //id自增
+                  var  addSql = 'INSERT INTO 2018_08_21(member_id,lon,lat,area_origin,area_country,area_province,area_city,access_count,last_access_ip,update_time,log_date,des) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)'; //id自增
                   var  addSqlParams = [member_id,lon,lat,area,area_country,area_province,area_city,accessCountFromDistinctObj,ip,new Date(),logdate,des]; //可接受传递参数++++++++++++++++日志后缀日期
               
                   connection.query(addSql,addSqlParams,function (error, result) {
@@ -302,18 +289,18 @@ const run = async()=> {
                     }
                   });
               
-                  // console.log('----------------------跑完一条--------------------------');
-                  // setTimeout(()=>{carryon2()},3000);//3秒
                 } catch (error) {
                   logger.log("info",`------------抓取api报错${error}------------`);
                   console.log(`------------抓取api报错${error}------------`);
                   carryon2();
                 }
-                // temp--;
               });
             }else{
-              logger.log("info",`------------该行数据没有会员号，不查询：${key1.trim()}------------`);
-              console.log(`------------该行数据没有会员号，不查询：${key1.trim()}------------`);
+              logger.log("info",`------------该行数据格式错误：${key1.trim()}------------`);
+              console.log(`------------该行数据格式错误：${key1.trim()}------------`);
+              var  addSql = 'INSERT INTO 2018_08_21(member_id,lon,lat,area_origin,area_country,area_province,area_city,access_count,last_access_ip,update_time,log_date,des) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)'; //id自增
+              var  addSqlParams = ['','','','','','','',accessCountFromDistinctObj,'',new Date(),logdate,`数据格式错误:${key1.trim()}`]; //可接受传递参数++++++++++++++++日志后缀日期
+              connection.query(addSql,addSqlParams,function (error, result) {});
             }
             des = "";
             accessCountFromDistinctObj = 1;
