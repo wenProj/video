@@ -66,29 +66,30 @@ const run = async()=> {
         //查询log_date 最新日期，避免重复跑日志文件
 
         let flag = false;
-        await new Promise((carryon5)=> {
-          connection.query('SELECT log_date FROM 2018_08_21 WHERE 1=1 ORDER BY log_date DESC limit 1', function (error, results, fields) {
-            if (error) {
-              logger.log("info",`数据库查询日志日期出错:${error}`);
-              console.log(`数据库查询日志日期出错:${error}`);
-              carryon5();
-            };
-            if(results.length == 1){
-              if(new Date(logdate) > new Date(results[0].log_date.Format("yyyy-MM-dd"))){//例:时间2018-07-06  转Date后，会比2018-7-6 转Date后 多8个小时,所以这里要转为相同格式，再比较
+        if(logdate.length == 10){
+          await new Promise((carryon5)=> {
+            connection.query('SELECT log_date FROM 2018_08_21 WHERE 1=1 ORDER BY log_date DESC limit 1', function (error, results, fields) {
+              if (error) {
+                logger.log("info",`数据库查询日志日期出错:${error}`);
+                console.log(`数据库查询日志日期出错:${error}`);
+                carryon5();
+              };
+              if(results!= undefined && results.length == 1){
+                if(new Date(logdate) > new Date(results[0].log_date.Format("yyyy-MM-dd"))){//例:时间2018-07-06  转Date后，会比2018-7-6 转Date后 多8个小时,所以这里要转为相同格式，再比较
+                  flag = true;
+                  carryon5();
+                }else{
+                  flag = false;
+                  carryon5();
+                }
+              }else{
+                //数据库无记录，此时全部日志新增
                 flag = true;
                 carryon5();
-              }else{
-                flag = false;
-                carryon5();
               }
-            }else{
-              //数据库无记录，此时全部日志新增
-              flag = true;
-              carryon5();
-            }
+            });
           });
-        });
-
+        }
         if(flag){
           //读取每个ip日志文件
           let arr = new Array();//用于放ip
