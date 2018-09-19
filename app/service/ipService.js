@@ -57,7 +57,7 @@ let getdata = async data => {//data请求参数
 
 //使用sequelize框架
 let getdata2 = async param=>{
-    if(param.log_date == undefined){
+    if(param.log_date == undefined || param.log_date == ""){
         param.log_date = moment().subtract(1, 'days').format('YYYY-MM-DD');
     }
     const condition = {
