@@ -22,19 +22,20 @@ Date.prototype.Format = function (fmt) { //author: meizz
 let getdata = async ctx => {
     let param = ctx.query;
     console.log(param);
-
     return await ipService.getdata(param);
 }
 
 let getExcel = async ctx => {
     let param = ctx.query;
+    console.log(param);
     const result = await ipService.getdata(param);
     let data = [["序号", "会员号", "经度", "纬度", "ip查询地区", "经纬度查询详细地址", "访问量", "该地区示例IP","描述","日志日期","更新时间","","总访问量"]],
         fileName = "DQIP." + new Date().Format("yyyy-MM-dd"),
         filePath = "C:\\Users\\test03\\Desktop\\" + fileName + ".xlsx";
     //修改文件名日期为前一天
     if(result.data.length != 0 && result.data[0].log_date != undefined){
-        data.fileName = "DQIP." + result.data[0].log_date.Format("yyyy-MM-dd");
+        fileName = "DQIP." + result.data[0].log_date.Format("yyyy-MM-dd");
+        filePath = "C:\\Users\\test03\\Desktop\\" + fileName + ".xlsx";
     }
     let datas = result.data;
     for (let i = 0; i < datas.length; i++) {
