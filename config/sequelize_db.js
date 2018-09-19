@@ -1,7 +1,7 @@
 var Sequelize = require('sequelize');
 
-module.exports = new Sequelize('date', 'root', '123456', {
-  host: 'localhost', // 数据库地址
+module.exports = new Sequelize('iplonlat', 'dqpay', 'kVmffV&p', {
+  host: 'universe.cluster-ro-c0sdt8ew9eze.ap-southeast-1.rds.amazonaws.com', // 数据库地址
   dialect: 'mysql', // 指定连接的数据库类型
   pool: {
       max: 5, // 连接池中最大连接数量

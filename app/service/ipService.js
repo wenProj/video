@@ -1,7 +1,8 @@
 const mysql = require('mysql');
 const config =  require(`../../config/mysql_test.js`);
 const areaIp = require('../models/areaIp')
-
+var sequelize = require('sequelize');
+const moment = require('moment');
 //统一返回值
 let res = { 
     data: '',
@@ -55,15 +56,36 @@ let getdata = async data => {//data请求参数
 }
 
 //使用sequelize框架
-let getdata2 = async data=>{
+let getdata2 = async param=>{
+    if(param.log_date == undefined){
+        param.log_date = moment().subtract(1, 'days').format('YYYY-MM-DD');
+    }
+    const condition = {
+        attributes: ['id','member_id','lon','lat','area_origin','area_country',[sequelize.fn('SUM', sequelize.col('access_count')), 'sum'],'last_access_ip','update_time','log_date','des'],
+        where: {log_date: param.log_date + ' 00:00:00'},
+        order: [[sequelize.fn('SUM', sequelize.col('access_count')), 'DESC']],
+        group: ['member_id','lon','lat','area_origin','area_country','des']
+    };
+    //添加条件
+    if(param.des != "" && param.des != undefined){
+        condition.where.des = param.des;
+    }
+    if(param.area_origin == ""){
+        condition.where.area_origin = param.area_origin;
+    }
+    if(param.area_country == ""){
+        condition.where.area_country = param.area_country;
+    }
 
-    let datas = await areaIp.db().findAll({
-        'order': [['access_count', 'DESC']]
-    });
+    let datas = await areaIp.db().findAll(condition);
     res.data = datas;
-
-    let sum = await areaIp.db().sum('access_count');
-    res.access_count_sum = sum;
+    //计算总访问量
+    let totalSum = 0;
+    datas.forEach(e => {
+        e = JSON.parse(JSON.stringify(e));
+        totalSum = totalSum + Number(e.sum);
+    });
+    res.access_count_sum = totalSum;
 
     return res;
 };

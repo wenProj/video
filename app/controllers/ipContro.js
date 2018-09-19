@@ -20,25 +20,34 @@ Date.prototype.Format = function (fmt) { //author: meizz
   }
 
 let getdata = async ctx => {
-    // const cup = ctx.body;//根据球队名称筛选
-    return await ipService.getdata();
+    let param = ctx.query;
+    console.log(param);
+
+    return await ipService.getdata(param);
 }
 
 let getExcel = async ctx => {
-    const result = (await ipService.getdata());
-    let data = [["序号", "国家", "省份", "城市", "访问量", "该地区最后一个访问IP", "日志日期", "更新时间","","总访问量"]],
+    let param = ctx.query;
+    const result = await ipService.getdata(param);
+    let data = [["序号", "会员号", "经度", "纬度", "ip查询地区", "经纬度查询详细地址", "访问量", "该地区示例IP","描述","日志日期","更新时间","","总访问量"]],
         fileName = "DQIP." + new Date().Format("yyyy-MM-dd"),
         filePath = "C:\\Users\\test03\\Desktop\\" + fileName + ".xlsx";
-        
+    //修改文件名日期为前一天
+    if(result.data.length != 0 && result.data[0].log_date != undefined){
+        data.fileName = "DQIP." + result.data[0].log_date.Format("yyyy-MM-dd");
+    }
     let datas = result.data;
     for (let i = 0; i < datas.length; i++) {
         let ipExcel = [];
         ipExcel.push(i+1);
+        ipExcel.push(datas[i].member_id);
+        ipExcel.push(datas[i].lon);
+        ipExcel.push(datas[i].lat);
+        ipExcel.push(datas[i].area_origin);
         ipExcel.push(datas[i].area_country);
-        ipExcel.push(datas[i].area_province);
-        ipExcel.push(datas[i].area_city);
-        ipExcel.push(datas[i].access_count);
+        ipExcel.push(datas[i].sum);
         ipExcel.push(datas[i].last_access_ip);
+        ipExcel.push(datas[i].des);
         ipExcel.push(datas[i].log_date.Format("yyyy-MM-dd"));
         ipExcel.push(datas[i].update_time.Format("yyyy-MM-dd HH:mm:ss"));
         //添加总访问量

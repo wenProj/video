@@ -3,41 +3,90 @@
 <head>
   <title>IP统计</title>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="./static/images/poss.png" mce_href="./static/images/poss.png" type="image/x-icon">
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/datepicker.css">
   <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.min.js"></script>
   <script src="https://cdn.bootcss.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
   <script src="https://cdn.bootcss.com/angular.js/1.6.3/angular.min.js"></script>
+  <script src="/static/js/plugins/jquery.js"></script>
+  <script src="/static/js/plugins/moment.min.js"></script>
+  <script src="/static/js/datepicker.all.js"></script>
+  <script type="text/javascript">
+  $(function(){
+    //年月日单个
+      $('.J-datepicker-day').datePicker({
+      hasShortcut: true,
+      format:'YYYY-MM-DD',
+      shortcutOptions: [{
+        name: '今天',
+        day: '0'
+      }, {
+        name: '昨天',
+        day: '-1'
+      }, {
+        name: '一周前',
+        day: '-7'
+      }]
+    });
+  });
+  </script>
 </head>
 
 <body>
-<div ng-app="ip" ng-controller="ipCtrl" class="container">
-  <br/><h2>大强-访问IP统计 <button type="button" style="float: right;background-color: #212529;color: #fff" class="btn btn-default" ng-click="excel()"><b>下载Excel</b></button><span style="float: right">总访问量:{{ sum }}&emsp;&emsp;</span></h2>
-  <table class="table table-striped" style="text-align: center;">
+
+
+
+
+
+<div ng-app="ip" ng-controller="ipCtrl">
+    <br/>
+  <h3>&emsp;大强-访问IP统计
+    &emsp;总访问量:{{ sum }}&emsp;
+
+    &emsp;日志日期:
+    <div class="c-datepicker-date-editor c-datepicker-single-editor J-datepicker-day mt10">
+        <input type="text" autocomplete="off" id="log_date" placeholder="选择日期" class="c-datepicker-data-input only-date" value="">
+    </div>
+    &emsp;描述:<input type="text" id="des" class="form-control" style="width:200px;display:inline" placeholder="请输入描述">
+    &emsp;IP查询地区为空：<input type="checkbox" id="area_origin" class="checkbox">
+    &emsp;经纬度地区为空：<input type="checkbox" id="area_country" class="checkbox">
+
+    <span style="float: right;">&emsp;</span>
+    <button type="button" style="float: right;background-color: #212529;color: #fff" class="btn btn-default" ng-click="excel()"><b>下载Excel</b></button>
+    <span style="float: right;">&emsp;</span>
+    <button type="button" style="float: right;background-color: #212529;color: #fff" class="btn btn-default" ng-click="submit()"><b>提交</b></button>
+  </h3>
+  <table class="table table-striped" style="text-align: center;" width="100%">
     <thead class="thead-dark">
       <tr>
-        <th>序号</th>
-        <th>国家/地区</th>
-        <th>省份</th>
-        <th>城市</th>
-        <th>访问量</th>
-        <th>该地区最后一个访问IP</th>
-        <th>日志日期</th>
-        <th>更新时间</th>
+        <th width="100px">序号</th>
+        <th width="100px">会员号</th>
+        <th width="100px">经度</th>
+        <th width="100px">纬度</th>
+        <th width="200px">ip查询地区</th>
+        <th width="400px">经纬度查询详细地址</th>
+        <th width="100px">访问量</th>
+        <th width="200px">该地区示例IP</th>
+        <th width="100px">描述</th>
+        <th width="200px">日志日期</th>
+        <th width="200px">更新时间</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="x in match">
-        <td>{{ $index+1 }}</td>
-        <td>{{ x.area_country }}</td>
-        <td>{{ x.area_province }}</td>
-        <td>{{ x.area_city }}</td>
-        <td>{{ x.access_count }}</td>
-        <td>{{ x.last_access_ip }}</td>
-        <td>{{ x.log_date | date : 'yyyy-MM-dd'}}</td>
-        <td>{{ x.update_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td width="100px">{{ $index+1 }}</td>
+        <td width="100px">{{ x.member_id }}</td>
+        <td width="100px">{{ x.lon }}</td>
+        <td width="100px">{{ x.lat }}</td>
+        <td width="300px">{{ x.area_origin }}</td>
+        <td width="600px">{{ x.area_country }}</td>
+        <td width="200px">{{ x.sum }}</td>
+        <td width="100px">{{ x.last_access_ip }}</td>
+        <td width="400px">{{ x.des }}</td>
+        <td width="300px">{{ x.log_date | date : 'yyyy-MM-dd'}}</td>
+        <td width="400px">{{ x.update_time | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
       </tr>
     </tbody>
   </table>
@@ -48,16 +97,48 @@
     app.controller('ipCtrl', function($scope, $http, $location) {
       var url = $location.protocol() + "://" + $location.host() + ":" + $location.port();
       $http.get(url+"/ip").then(function (response) {
-        // console.log(JSON.stringify(response.data.data));
         $scope.match = response.data.data;
         $scope.sum = response.data.access_count_sum;
       });
 
       //下载Excel函数
       $scope.excel = ()=>{
-        $http.get(url+"/excel").then(function (response) {
+        let log_date = $("#log_date").val();
+        let param = "";
+        let des = $("#des").val();
+        if(des != ""){
+          param += "&des="+des;
+        }
+        if($("#area_origin").is(':checked')){
+          param += "&area_origin=";
+        }
+        if($("#area_country").is(':checked')){
+          param += "&area_country=";
+        }
+
+        $http.get(url+"/excel?log_date="+log_date+""+param).then(function (response) {
         console.log(JSON.stringify(response.data));
-      });
+        });
+      }
+
+      $scope.submit = ()=>{
+        let log_date = $("#log_date").val();
+        let param = "";
+        let des = $("#des").val();
+        if(des != ""){
+          param += "&des="+des;
+        }
+        if($("#area_origin").is(':checked')){
+          param += "&area_origin=";
+        }
+        if($("#area_country").is(':checked')){
+          param += "&area_country=";
+        }
+
+        $http.get(url+"/ip?log_date="+log_date+""+param).then(function (response) {
+          $scope.match = response.data.data;
+          $scope.sum = response.data.access_count_sum;
+        });
       }
     });
 

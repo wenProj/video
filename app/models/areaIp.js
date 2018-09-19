@@ -12,6 +12,21 @@ let db = () => {
 			autoIncrement: true,
 			field: 'id'
 		},
+		member_id: {
+            type: Sequelize.STRING(50),
+            allowNull: true,
+			field: 'member_id'
+		},
+		lon: {
+            type: Sequelize.STRING(100),
+            allowNull: true,
+			field: 'lon'
+		},
+		lat: {
+            type: Sequelize.STRING(100),
+            allowNull: true,
+			field: 'lat'
+		},
 		area_origin: {
             type: Sequelize.STRING(255),
             allowNull: true,
@@ -51,9 +66,14 @@ let db = () => {
 			type: Sequelize.DATE,
 			allowNull: true,
 			field: 'log_date'
+        },
+		des: {
+			type: Sequelize.STRING(255),
+			allowNull: true,
+			field: 'des'
         }
 	}, {
-		tableName: 'area_ip',
+		tableName: 'ip_lonlat',
 		timestamps: false,
 		underscoredAll: false//驼峰规则
 	});
