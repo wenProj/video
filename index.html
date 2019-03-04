@@ -11,8 +11,8 @@
     <style type="text/css">
         .main-wrap{
             margin: 0 auto;
-            min-width: 480px; /* 320px; */
-            max-width: 640px;
+            min-width: 240px; /* 320px; */
+            max-width: 480px;
         }
 
         .main-wrap video{
@@ -25,7 +25,7 @@
             let temp = url.indexOf("name=");
             if(temp > 0){
                 let name = url.substring(temp+5,url.length);
-                $("#move").attr("src", "./static/move/"+name);
+                $("#move").attr("src", "http://45.32.71.113:6604/move/"+name);//./static/move/
             }
         });
     </script>
@@ -33,7 +33,7 @@
 <body>
     <div class="main-wrap">
         <video ishivideo="true" autoplay="true" isrotate="false" autoHide="true">
-            <source src="" type="video/mp4" id="move"><!-- ./static/move/xiaolian.mp4 -->
+            <source src="" type="video/mp4" id="move"><!-- ./static/move/ddd.mp4 -->
         </video>
     </div>
 </body>
